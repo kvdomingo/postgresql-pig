@@ -1,6 +1,6 @@
 # PostgreSQL-Pig
 
-[bitnami/postgresql](https://hub.docker.com/r/bitnami/postgresql) image with [Pig CLI](https://github.com/pgsty/pig)
+Official Postgres Docker image with [Pig CLI](https://github.com/pgsty/pig)
 
 Default installed extensions:
 
