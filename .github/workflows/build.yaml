@@ -15,20 +15,11 @@ permissions:
   packages: write
 
 jobs:
-  build-15:
+  build:
     uses: ./.github/workflows/common-build.yaml
     secrets: inherit
+    strategy:
+      matrix:
+        version: [ 15, 16, 17 ]
     with:
-      version: 15
-
-  build-16:
-    uses: ./.github/workflows/common-build.yaml
-    secrets: inherit
-    with:
-      version: 16
-
-  build-17:
-    uses: ./.github/workflows/common-build.yaml
-    secrets: inherit
-    with:
-      version: 17
+      version: ${{ matrix.version }}
