@@ -15,6 +15,12 @@ permissions:
   packages: write
 
 jobs:
+  build-15:
+    uses: ./.github/workflows/common-build.yaml
+    secrets: inherit
+    with:
+      version: 15
+
   build-16:
     uses: ./.github/workflows/common-build.yaml
     secrets: inherit
