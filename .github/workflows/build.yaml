@@ -5,6 +5,15 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+concurrency:
+  group: build-${{ inputs.version }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  id-token: write
+  packages: write
+
 jobs:
   build-16:
     uses: ./.github/workflows/common-build.yaml

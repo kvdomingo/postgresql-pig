@@ -14,15 +14,6 @@ on:
         required: true
         description: PostgreSQL version
 
-concurrency:
-  group: build-${{ inputs.version }}
-  cancel-in-progress: true
-
-permissions:
-  contents: read
-  id-token: write
-  packages: write
-
 jobs:
   build:
     name: Build PostgreSQL ${{ inputs.version }} with Pig CLI
