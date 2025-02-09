@@ -25,8 +25,8 @@ RUN chmod +x install-pig.sh && \
       -y && \
     # Pig CLI can detect the Postgres installation but does not install
     # extensions in the correct directory!
-    cp -r /usr/lib/postgresql/16/lib/ ${POSTGRESQL_BASE_DIR} && \
-    cp -r /usr/share/postgresql/16/extension/ ${POSTGRESQL_BASE_DIR}/share && \
+    cp -r /usr/lib/postgresql/17/lib/ ${POSTGRESQL_BASE_DIR} && \
+    cp -r /usr/share/postgresql/17/extension/ ${POSTGRESQL_BASE_DIR}/share && \
     apt-get remove -y curl sudo && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
