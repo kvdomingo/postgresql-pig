@@ -1,0 +1,19 @@
+name: '[Pipeline] Build Docker images'
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-16:
+    uses: ./.github/workflows/common-build.yaml
+    secrets: inherit
+    with:
+      version: 16
+
+  build-17:
+    uses: ./.github/workflows/common-build.yaml
+    secrets: inherit
+    with:
+      version: 17
