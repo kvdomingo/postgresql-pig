@@ -1,5 +1,8 @@
-FROM bitnami/postgresql:15
+ARG PG_VERSION
 
+FROM bitnami/postgresql-repmgr:${PG_VERSION}
+
+ARG PG_VERSION
 ENV SUDO_FORCE_REMOVE=yes
 ENV POSTGRESQL_BASE_DIR=/opt/bitnami/postgresql
 
@@ -25,8 +28,8 @@ RUN chmod +x install-pig.sh && \
       -y && \
     # Pig CLI can detect the Postgres installation but does not install
     # extensions in the correct directory!
-    cp -r /usr/lib/postgresql/15/lib/ ${POSTGRESQL_BASE_DIR} && \
-    cp -r /usr/share/postgresql/15/extension/ ${POSTGRESQL_BASE_DIR}/share && \
+    cp -r "/usr/lib/postgresql/${PG_VERSION}/lib/" "${POSTGRESQL_BASE_DIR}" && \
+    cp -r "/usr/share/postgresql/${PG_VERSION}/extension/" "${POSTGRESQL_BASE_DIR}/share" && \
     apt-get remove -y curl sudo && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
