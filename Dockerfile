@@ -32,3 +32,5 @@ RUN chmod +x install-pig.sh && \
 RUN usermod -u 26 postgres
 
 USER 26
+
+WORKDIR /
