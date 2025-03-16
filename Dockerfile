@@ -1,11 +1,6 @@
-FROM debian:bookworm-slim
+ARG PG_VERSION=${PG_VERSION}
 
-ARG PG_VERSION
-ENV PATH="${PATH}:/usr/lib/postgresql/${PG_VERSION}/bin"
-
-USER root
-
-WORKDIR /tmp
+FROM postgres:${PG_VERSION}-bookworm
 
 SHELL [ "/bin/bash", "-euxo", "pipefail", "-c" ]
 # DL3009: Lists are deleted later
@@ -19,7 +14,6 @@ RUN chmod +x install-pig.sh && \
     bash install-pig.sh && \
     pig repo add pigsty pgdg -u && \
     pig ext install \
-      "postgresql-${PG_VERSION}" \
       pgvector \
       pg_idkit \
       pg_stat_monitor \
@@ -32,5 +26,3 @@ RUN chmod +x install-pig.sh && \
 RUN usermod -u 26 postgres
 
 USER 26
-
-WORKDIR /
