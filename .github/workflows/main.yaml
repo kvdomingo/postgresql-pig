@@ -1,4 +1,4 @@
-name: '[Pipeline] Build Docker images'
+name: '[Pipeline] Build and deploy Docker images'
 
 on:
   push:
@@ -55,3 +55,18 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  deploy:
+    runs-on: self-hosted
+    needs: [ build ]
+    name: Deploy to srv-pg-01
+    steps:
+      - uses: actions/checkout@v4
+        name: Checkout
+
+      - name: Deploy
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRESQL_PASSWORD }}
+        run: docker compose up --wait

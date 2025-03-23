@@ -1,0 +1,30 @@
+volumes:
+  db-data:
+
+services:
+  db:
+    image: ghcr.io/kvdomingo/postgresql-pig:17
+    restart: unless-stopped
+    shm_size: 128mb
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - '5432:5432'
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  backup:
+    image: offen/docker-volume-backup:v2
+    restart: unless-stopped
+    environment:
+      AWS_S3_BUCKET_NAME: lab-srv-pg-01-backups
+      AWS_S3_PATH: backup/db-primary
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      BACKUP_CRON_EXPRESSION: "0 0 * * *"
+      BACKUP_COMPRESSION: zst
+      BACKUP_FILENAME: "backup-%Y%m%dT%H%M%SZ.{{ .Extension }}"
+      BACKUP_FILENAME_EXPAND: true
+      BACKUP_FROM_SNAPSHOT: true
+    volumes:
+      - db-data:/backup/db-primary:ro
