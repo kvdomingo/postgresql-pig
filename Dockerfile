@@ -1,9 +1,8 @@
 ARG PG_VERSION
 
-FROM postgres:${PG_VERSION}-bookworm
+FROM --platform=${TARGETPLATFORM} postgres:${PG_VERSION}-bookworm
 
 ARG PG_VERSION
-ENV SUDO_FORCE_REMOVE=yes
 
 USER root
 
@@ -27,7 +26,7 @@ RUN chmod +x install-pig.sh && \
       pg_stat_monitor \
       pgaudit \
       -y && \
-    apt-get remove -y curl sudo && \
+    apt-get remove -y curl && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
