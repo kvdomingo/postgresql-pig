@@ -30,4 +30,6 @@ RUN chmod +x install-pig.sh && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+WORKDIR /
+
 USER 999

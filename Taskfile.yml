@@ -9,6 +9,12 @@ tasks:
   default:
     cmd: bake
 
+  init:
+    desc: Initial setup
+    cmds:
+      - pip install -U pre-commit
+      - pre-commit install
+
   bake:
     desc: Bake Docker image
     cmd: docker buildx bake -f docker-bake.hcl
