@@ -4,7 +4,7 @@ variable "TARGETARCH" {
   default = "amd64"
 }
 variable "PG_VERSION" {
-  default = 17
+  default = 18
 }
 
 target "default" {

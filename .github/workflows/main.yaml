@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: [ 15, 16, 17 ]
+        version: [ 16, 17, 18 ]
     name: Build PostgreSQL ${{ matrix.version }} with Pig CLI
     steps:
       - uses: actions/checkout@v4
@@ -46,7 +46,7 @@ jobs:
           tags: |
             type=sha
             type=raw,value=${{ matrix.version }}
-            type=raw,value=latest,enabled=${{ matrix.version == '17' }}
+            type=raw,value=latest,enabled=${{ matrix.version == '18' }}
 
       - name: Build and push
         uses: docker/build-push-action@v6
