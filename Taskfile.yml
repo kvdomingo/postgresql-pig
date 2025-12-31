@@ -18,3 +18,15 @@ tasks:
   bake:
     desc: Bake Docker image
     cmd: docker buildx bake -f docker-bake.hcl
+
+  tf-init:
+    desc: Initialize Terraform
+    cmd: infisical run -- terraform init {{ .CLI_ARGS }}
+
+  tf-plan:
+    desc: Plan Terraform resources
+    cmd: infisical run -- terraform plan -out .tfplan {{ .CLI_ARGS }}
+
+  tf-apply:
+    desc: Apply Terraform plan
+    cmd: infisical run -- terraform apply .tfplan {{ .CLI_ARGS }}
