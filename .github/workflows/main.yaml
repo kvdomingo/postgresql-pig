@@ -1,8 +1,8 @@
-name: '[Pipeline] Build and deploy Docker images'
+name: "[Pipeline] Build and deploy Docker images"
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 concurrency:
@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: [ 16, 17, 18 ]
+        version: [17, 18]
     name: Build PostgreSQL ${{ matrix.version }} with Pig CLI
     steps:
       - uses: actions/checkout@v4
@@ -62,7 +62,7 @@ jobs:
 
   deploy:
     runs-on: self-hosted
-    needs: [ build ]
+    needs: [build]
     name: Deploy to srv-pg-01
     steps:
       - uses: actions/checkout@v4
