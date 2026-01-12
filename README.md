@@ -4,10 +4,11 @@ Official Postgres Docker image with [Pig CLI](https://github.com/pgsty/pig)
 
 Default installed extensions:
 
-- pgvector
 - pg_idkit
 - pg_stat_monitor
 - pgaudit
+- pgvector
+- postgis
 
 ## Usage
 
@@ -24,7 +25,7 @@ services:
   environment:
     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
   volumes:
-    - db-data:/var/lib/postgresql/data
+    - db-data:/var/lib/postgresql
   ports:
     - '5432:5432'
   # optional block if extension is required to be in shared_preload_libraries

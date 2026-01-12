@@ -1,4 +1,5 @@
-ARG PG_VERSION
+ARG PG_VERSION=18
+ARG TARGETPLATFORM=linux/amd64
 
 FROM --platform=${TARGETPLATFORM} postgres:${PG_VERSION}-bookworm
 
@@ -21,10 +22,11 @@ RUN chmod +x install-pig.sh && \
     bash install-pig.sh && \
     pig repo add pigsty pgdg -u && \
     pig ext install \
-      pgvector \
       pg_idkit \
       pg_stat_monitor \
       pgaudit \
+      pgvector \
+      postgis \
       -y && \
     apt-get remove -y curl && \
     apt-get clean && \
