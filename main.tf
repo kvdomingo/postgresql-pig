@@ -24,11 +24,15 @@ provider "postgresql" {
 locals {
   application_users = tomap({
     inf_test = {
-      name = "inf_test"
+      name     = "inf_test"
       password = data.infisical_secrets.default.secrets["INF_TEST_USER_PASSWORD"].value
     }
+    lakefs = {
+      name     = "lakefs"
+      password = data.infisical_secrets.default.secrets["DB_PASSWORD_LAKEFS"].value
+    }
     time_machine = {
-      name = "time_machine"
+      name     = "time_machine"
       password = data.infisical_secrets.default.secrets["DB_PASSWORD_TIME_MACHINE"].value
     }
   })
