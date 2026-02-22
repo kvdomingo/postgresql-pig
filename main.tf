@@ -35,6 +35,10 @@ locals {
       name     = "time_machine"
       password = data.infisical_secrets.default.secrets["DB_PASSWORD_TIME_MACHINE"].value
     }
+    vaultwarden = {
+      name     = "vaultwarden"
+      password = data.infisical_secrets.default.secrets["DB_PASSWORD_VAULTWARDEN"].value
+    }
   })
 }
 
