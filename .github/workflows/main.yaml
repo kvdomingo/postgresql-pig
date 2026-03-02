@@ -72,5 +72,9 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRESQL_PASSWORD }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          POOLER_SECRET_KEY_BASE: ${{ secrets.POOLER_SECRET_KEY_BASE }}
+          POOLER_VAULT_ENC_KEY: ${{ secrets.POOLER_VAULT_ENC_KEY }}
+          POOLER_API_JWT_SECRET: ${{ secrets.POOLER_API_JWT_SECRET }}
+          POOLER_METRICS_JWT_SECRET: ${{ secrets.POOLER_METRICS_JWT_SECRET }}
         run: docker compose up --wait
