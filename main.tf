@@ -23,13 +23,13 @@ provider "postgresql" {
 
 locals {
   application_users = tomap({
-    inf_test = {
-      name     = "inf_test"
-      password = data.infisical_secrets.default.secrets["INF_TEST_USER_PASSWORD"].value
-    }
     lakefs = {
       name     = "lakefs"
       password = data.infisical_secrets.default.secrets["DB_PASSWORD_LAKEFS"].value
+    }
+    nocodb = {
+      name     = "nocodb"
+      password = data.infisical_secrets.default.secrets["DB_PASSWORD_NOCODB"].value
     }
     time_machine = {
       name     = "time_machine"
@@ -42,7 +42,7 @@ locals {
   })
 }
 
-resource "postgresql_role" "inf_test" {
+resource "postgresql_role" "default" {
   for_each = local.application_users
 
   name                      = each.value["name"]
@@ -53,10 +53,10 @@ resource "postgresql_role" "inf_test" {
   bypass_row_level_security = false
 }
 
-resource "postgresql_database" "inf_test" {
+resource "postgresql_database" "default" {
   for_each = local.application_users
 
   name                   = each.value["name"]
-  owner                  = postgresql_role.inf_test[each.key].name
+  owner                  = postgresql_role.default[each.key].name
   alter_object_ownership = true
 }
