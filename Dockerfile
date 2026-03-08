@@ -11,8 +11,7 @@ WORKDIR /tmp
 
 SHELL [ "/bin/bash", "-euxo", "pipefail", "-c" ]
 
-# DL3009: apt lists are removed later
-# hadolint ignore=DL3009
+# hadolint ignore=DL3009 # apt lists are removed later
 RUN apt-get update && \
     apt-get install -y --no-install-recommends curl sudo ca-certificates
 
@@ -22,11 +21,18 @@ RUN chmod +x install-pig.sh && \
     bash install-pig.sh && \
     pig repo add pigsty pgdg -u && \
     pig ext install \
+      hstore \
       pg_idkit \
       pg_stat_monitor \
+      pg_stat_statements \
       pgaudit \
+      pgcrypto \
       pgvector \
       postgis \
+      postgres_fdw \
+      rum \
+      timescaledb \
+      wal2json \
       -y && \
     apt-get remove -y curl && \
     apt-get clean && \
