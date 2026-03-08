@@ -77,4 +77,8 @@ jobs:
           POOLER_VAULT_ENC_KEY: ${{ secrets.POOLER_VAULT_ENC_KEY }}
           POOLER_API_JWT_SECRET: ${{ secrets.POOLER_API_JWT_SECRET }}
           POOLER_METRICS_JWT_SECRET: ${{ secrets.POOLER_METRICS_JWT_SECRET }}
-        run: docker compose up --wait
+          DBLAB_VERIFICATION_TOKEN: ${{ secrets.DBLAB_VERIFICATION_TOKEN }}
+        run: >
+          docker compose pull &&
+          DOCKER_API_VERSION=$(curl -s --unix-socket /var/run/docker.sock http://localhost/version | jq .ApiVersion)
+          docker compose up --wait

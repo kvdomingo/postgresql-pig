@@ -9,12 +9,14 @@ services:
     ports:
       - 2345:2345
     environment:
-      DOCKER_API_VERSION: 1.54
+      DOCKER_API_VERSION: ${DOCKER_API_VERSION}
       PGPASSWORD: ${DB_PASSWORD}
+      DLE_VERIFICATION_TOKEN: ${DBLAB_VERIFICATION_TOKEN}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/dblab:/var/lib/dblab:rshared
       - ${HOME}/.dblab/engine/configs:/home/dblab/configs
+      - ./dblab-server.yml:/home/dblab/configs/server.yml:ro
       - ${HOME}/.dblab/engine/meta:/home/dblab/meta
       - ${HOME}/.dblab/engine/logs:/home/dblab/logs
       - /sys/kernel/debug:/sys/kernel/debug:rw
@@ -24,6 +26,7 @@ services:
   db:
     image: ghcr.io/kvdomingo/postgresql-pig:18
     restart: unless-stopped
+    shm_size: 1g
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
