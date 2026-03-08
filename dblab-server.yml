@@ -8,7 +8,7 @@ server:
 embeddedUI:
   enabled: true # If enabled, a separate UI container will be started
   dockerImage: "postgresai/ce-ui:latest" # Default: "postgresai/ce-ui:latest"
-  host: "127.0.0.1" # Default: "127.0.0.1" (accepts only local connections)
+  host: "0.0.0.0" # Default: "127.0.0.1" (accepts only local connections)
   port: 2346 # UI port; default: "2346"
 
 global:
