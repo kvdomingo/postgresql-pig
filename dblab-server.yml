@@ -35,14 +35,14 @@ databaseContainer: &db_container
   # Docker config for all DB containers
   # See https://postgres.ai/docs/database-lab/supported_databases
   # DBLab SE and EE customers get images compatible with RDS, RDS Aurora, GCP CloudSQL, Heroku, Timescale Cloud, Supabase, PostGIS
-  dockerImage: "postgresai/extended-postgres:17-0.5.3" # Postgres image; major version (17) must match source if physical mode
+  dockerImage: "ghcr.io/kvdomingo/postgresql-pig:18" # Postgres image; major version (17) must match source if physical mode
   containerConfig: # Custom container config; see https://docs.docker.com/engine/reference/run/#runtime-constraints-on-resources
     "shm-size": 1gb # Shared memory size; increase if "could not resize shared memory segment" errors occur
 
 databaseConfigs: &db_configs # Postgres config for all DB containers
   configs:
     shared_buffers: 2GB # Postgres buffer pool size; large values can lead to OOM
-    shared_preload_libraries: "pg_stat_statements, pg_stat_kcache, auto_explain, logerrors, pgaudit, timescaledb, pg_net" # Shared libraries; copy from source
+    shared_preload_libraries: "pg_stat_statements, pg_stat_kcache, auto_explain, logerrors, pgaudit, timescaledb, pg_net, pg_cron, citus, pg_wait_sampling, pg_qualstats, pgextwlist, anon" # Shared libraries; copy from source
     maintenance_work_mem: "512MB" # Maximum memory for maintenance operations (VACUUM, CREATE INDEX, etc.)
     work_mem: "9709kB" # This and Query Planning parameters should be copied from source; see https://postgres.ai/docs/how-to-guides/administration/postgresql-configuration#postgresql-configuration-in-clones
     # ... put Query Planning parameters here

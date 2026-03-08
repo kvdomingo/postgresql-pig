@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
     privileged: true
     ports:
-      - 2345-2346:2345-2346
+      - 2345:2345
     environment:
       DOCKER_API_VERSION: ${DOCKER_API_VERSION}
       PGPASSWORD: ${DB_PASSWORD}
