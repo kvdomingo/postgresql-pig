@@ -80,5 +80,5 @@ jobs:
           DBLAB_VERIFICATION_TOKEN: ${{ secrets.DBLAB_VERIFICATION_TOKEN }}
         run: >
           docker compose pull &&
-          DOCKER_API_VERSION=$(curl -s --unix-socket /var/run/docker.sock http://localhost/version | jq .ApiVersion)
+          DOCKER_API_VERSION=$(docker version --format '{{ .Server.APIVersion }}' | awk '{print $1}')
           docker compose up --wait
