@@ -2,17 +2,41 @@ volumes:
   db-data:
 
 services:
-  db:
-    image: ghcr.io/kvdomingo/postgresql-pig:17
+  dblab:
+    image: postgresai/dblab-server:4.0.4
     restart: unless-stopped
-    shm_size: 128mb
+    privileged: true
+    ports:
+      - 2345:2345
+    environment:
+      DOCKER_API_VERSION: 1.54
+      PGPASSWORD: ${DB_PASSWORD}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/dblab:/var/lib/dblab:rshared
+      - ${HOME}/.dblab/engine/configs:/home/dblab/configs
+      - ${HOME}/.dblab/engine/meta:/home/dblab/meta
+      - ${HOME}/.dblab/engine/logs:/home/dblab/logs
+      - /sys/kernel/debug:/sys/kernel/debug:rw
+      - /lib/modules:/lib/modules:ro
+      - /proc:/host_proc:ro
+
+  db:
+    image: ghcr.io/kvdomingo/postgresql-pig:18
+    restart: unless-stopped
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - '5432:5432'
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql
       - ./postgresql.conf:/etc/postgresql/postgresql.conf:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      start_period: 10s
+      interval: 20s
+      timeout: 5s
+      retries: 3
 
   backup:
     image: offen/docker-volume-backup:v2
@@ -55,4 +79,5 @@ services:
       - 5433:5433
       - 6543:6543
     depends_on:
-      - db
+      db:
+        condition: service_started
