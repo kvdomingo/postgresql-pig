@@ -23,6 +23,7 @@ RUN chmod +x install-pig.sh && \
     pig ext install \
       hstore \
       pg_idkit \
+      pg_net \
       pg_stat_monitor \
       pg_stat_statements \
       pgaudit \
