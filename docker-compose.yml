@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
     privileged: true
     ports:
-      - 2345-2346:2345-2346
+      - 2345:2345
     environment:
       DOCKER_API_VERSION: ${DOCKER_API_VERSION}
       PGPASSWORD: ${DB_PASSWORD}
@@ -22,15 +22,6 @@ services:
       - /sys/kernel/debug:/sys/kernel/debug:rw
       - /lib/modules:/lib/modules:ro
       - /proc:/host_proc:ro
-
-  dblab-ui:
-    image: postgresai/ce-ui:4.0.4
-    restart: unless-stopped
-    environment:
-      API_URL_PREFIX: http://dblab:2345
-      WS_URL_PREFIX: http://dblab:2345
-    ports:
-      - 2346:2346
 
   db:
     image: ghcr.io/kvdomingo/postgresql-pig:18

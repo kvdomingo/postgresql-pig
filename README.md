@@ -1,60 +1,63 @@
 # PostgreSQL-Pig
 
-Official Postgres Docker image with [Pig CLI](https://github.com/pgsty/pig)
+PostgreSQL Docker image (Debian Bookworm) with
+[Pig CLI](https://github.com/pgsty/pig). Built for `linux/amd64` and
+`linux/arm64`. Default PostgreSQL version: 18.
 
-Default installed extensions:
+## Pre-installed extensions
 
-- pg_idkit
-- pg_stat_monitor
-- pgaudit
-- pgvector
-- postgis
+- **Statistics / monitoring:** pg_stat_statements, pg_stat_monitor,
+  pg_stat_kcache, pg_wait_sampling, pg_qualstats, pg_show_plans, powa
+- **Audit / security:** pgaudit, pg_auth_mon, pgextwlist, set_user
+- **Data types / search:** pgvector, postgis, hstore, rum, pg_idkit
+- **Replication / ETL:** wal2json, postgres_fdw
+- **Utilities:** pg_cron, pg_repack, pg_hint_plan, hypopg, logerrors, pg_net,
+  anon, citus, hll, pgcrypto, plpython3u, timescaledb, topn
 
 ## Usage
 
-To use as-is, simply use the package repo name:
+Minimal `docker-compose.yml`:
 
 ```yaml
-# docker-compose.yml
 volumes:
   db-data:
 
 services:
   db:
-    image: ghcr.io/kvdomingo/postgresql-pig:${PG_VERSION}
-  environment:
-    POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-  volumes:
-    - db-data:/var/lib/postgresql
-  ports:
-    - '5432:5432'
-  # optional block if extension is required to be in shared_preload_libraries
-  command:
-    - postgres
-    - -c
-    - shared_preload_libraries=pg_stat_statements,pg_duckdb
+    image: ghcr.io/kvdomingo/postgresql-pig:${PG_VERSION:-18}
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - db-data:/var/lib/postgresql
+    ports:
+      - '5432:5432'
+    # optional: load extensions that require shared_preload_libraries
+    command:
+      - postgres
+      - -c
+      - shared_preload_libraries=pg_stat_statements,pg_stat_monitor
 ```
+
+CLI:
 
 ```shell
-# CLI
-docker run --rm -p 5432:5432 -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD} ghcr.io/kvdomingo/postgresql-pig:${PG_VERSION}
+docker run --rm -p 5432:5432 -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD} ghcr.io/kvdomingo/postgresql-pig:${PG_VERSION:-18}
 ```
 
-To install additional extensions, extend with a custom Dockerfile:
+## Adding more extensions
+
+To install extensions not included in the image, extend with a custom Dockerfile
+and [Pig ext](https://ext.pigsty.io):
 
 ```dockerfile
-FROM ghcr.io/kvdomingo/postgresql-pig:${PG_VERSION}
+FROM ghcr.io/kvdomingo/postgresql-pig:${PG_VERSION:-18}
 
-# switch to root to install packages
 USER root
 
-# install all extensions you need
-# ref: https://ext.pigsty.io
 RUN apt-get update && \
-    pig install pg_duckdb postgis timescaledb -y && \
+    pig install pg_duckdb -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# switch back to non-root user
 USER 999
 ```
