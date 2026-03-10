@@ -26,7 +26,7 @@ locals {
     hannibot = {
       name     = "hannibot"
       password = data.infisical_secrets.default.secrets["DB_PASSWORD_HANNIBOT"].value
-      version  = "1"
+      version  = "2"
     }
     lakefs = {
       name     = "lakefs"
