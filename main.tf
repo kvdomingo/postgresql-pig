@@ -23,28 +23,27 @@ provider "postgresql" {
 
 locals {
   application_users = tomap({
+    atuin = {
+      password = data.infisical_secrets.default.secrets["DB_PASSWORD_ATUIN"].value
+      version  = "2"
+    }
     hannibot = {
-      name     = "hannibot"
       password = data.infisical_secrets.default.secrets["DB_PASSWORD_HANNIBOT"].value
       version  = "2"
     }
     lakefs = {
-      name     = "lakefs"
       password = data.infisical_secrets.default.secrets["DB_PASSWORD_LAKEFS"].value
       version  = "1"
     }
     nocodb = {
-      name     = "nocodb"
       password = data.infisical_secrets.default.secrets["DB_PASSWORD_NOCODB"].value
       version  = "1"
     }
     time_machine = {
-      name     = "time_machine"
       password = data.infisical_secrets.default.secrets["DB_PASSWORD_TIME_MACHINE"].value
       version  = "1"
     }
     vaultwarden = {
-      name     = "vaultwarden"
       password = data.infisical_secrets.default.secrets["DB_PASSWORD_VAULTWARDEN"].value
       version  = "1"
     }
@@ -54,7 +53,7 @@ locals {
 resource "postgresql_role" "default" {
   for_each = local.application_users
 
-  name                      = each.value["name"]
+  name                      = each.key
   replication               = false
   login                     = true
   password_wo               = each.value["password"]
@@ -65,7 +64,7 @@ resource "postgresql_role" "default" {
 resource "postgresql_database" "default" {
   for_each = local.application_users
 
-  name                   = each.value["name"]
+  name                   = each.key
   owner                  = postgresql_role.default[each.key].name
   alter_object_ownership = true
 }
