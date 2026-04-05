@@ -30,7 +30,7 @@ services:
   db:
     image: ghcr.io/kvdomingo/postgresql-pig:18
     restart: unless-stopped
-    shm_size: 1g
+    shm_size: 2g
     command:
       - -c
       - config_file=/etc/postgresql/postgresql.conf
