@@ -55,9 +55,13 @@ services:
     image: ghcr.io/kvdomingo/postgresql-pig:18
     restart: unless-stopped
     shm_size: 1g
-    entrypoint: supercronic
+    entrypoint:
+      - /bin/bash
+      - -euxo
+      - pipefail
     command:
-      - /etc/pgbackrest/crontab
+      -c
+      - supercronic /etc/pgbackrest/crontab
     environment:
       PGBACKREST_REPO1_S3_KEY: ${AWS_ACCESS_KEY_ID}
       PGBACKREST_REPO1_S3_KEY_SECRET: ${AWS_SECRET_ACCESS_KEY}
