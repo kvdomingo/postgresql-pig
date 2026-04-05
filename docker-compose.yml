@@ -41,7 +41,6 @@ services:
       - '5432:5432'
     volumes:
       - db-data:/var/lib/postgresql
-      - ./entrypoint.sh:/entrypoint.sh:ro
       - ./postgresql.conf:/etc/postgresql/postgresql.conf:ro
       - ./pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf:ro
       - pgbackrest-log:/var/log/pgbackrest
