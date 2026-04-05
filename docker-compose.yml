@@ -52,7 +52,7 @@ services:
       retries: 3
 
   backup:
-    image: woblerr/pgbackrest:2.58.0
+    image: ghcr.io/kvdomingo/postgresql-pig:18
     restart: unless-stopped
     entrypoint: pgbackrest
     command:
@@ -70,8 +70,6 @@ services:
       PGBACKREST_REPO2_S3_REGION: us-west-002
       PGBACKREST_REPO2_S3_ENDPOINT: s3.us-west-002.backblazeb2.com
     volumes:
-      - db-data:/var/lib/postgresql
-      - ./postgresql.conf:/etc/postgresql/postgresql.conf:ro
       - ./pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf
       - pgbackrest-log:/var/log/pgbackrest
     profiles:
