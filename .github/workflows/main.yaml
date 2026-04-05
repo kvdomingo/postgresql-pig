@@ -3,6 +3,13 @@ name: "[Pipeline] Build and deploy Docker images"
 on:
   push:
     branches: [main]
+    paths:
+      - .github/**
+      - dblab-server.yml
+      - docker-compose.yml
+      - Dockerfile
+      - pgbackrest.conf
+      - postgresql.conf
   workflow_dispatch:
 
 concurrency:

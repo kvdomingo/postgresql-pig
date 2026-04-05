@@ -1,8 +1,18 @@
 # PostgreSQL-Pig
 
 PostgreSQL Docker image (Debian Bookworm) with
-[Pig CLI](https://github.com/pgsty/pig). Built for `linux/amd64` and
-`linux/arm64`. Default PostgreSQL version: 18.
+[Pig CLI](https://github.com/pgsty/pig) and **pgBackrest** installed. Built for
+`linux/amd64` and `linux/arm64`. Default PostgreSQL version: **18**.
+
+## Image registry and tags
+
+Published to **GHCR**: `ghcr.io/kvdomingo/postgresql-pig`
+
+- **`18`** and **`latest`** — PostgreSQL 18
+- **`<git-sha>`** — immutable tag per build (see GitHub Actions)
+
+Pushes run from `main` when the **Dockerfile** changes (multi-arch build via
+Buildx).
 
 ## Pre-installed extensions
 
@@ -42,6 +52,20 @@ CLI:
 
 ```shell
 docker run --rm -p 5432:5432 -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD} ghcr.io/kvdomingo/postgresql-pig:${PG_VERSION:-18}
+```
+
+## This repository
+
+[`docker-compose.yml`](docker-compose.yml) defines an optional stack around the
+same image: PostgreSQL (custom `postgresql.conf` / `pgbackrest.conf` mounts),
+optional **pgBackrest** backups (`docker compose --profile backup up`), **Supavisor**
+pooling, and **Postgres.ai DBLab**. Set the environment variables referenced in
+the compose file before bringing services up.
+
+Local image build (requires Buildx / `docker-bake.hcl`):
+
+```shell
+task bake
 ```
 
 ## Adding more extensions
