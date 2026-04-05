@@ -1,2 +1,2 @@
 # Full backup every Sunday at 03:00 UTC+8 (Saturday at 19:00 UTC)
-0 19 * * 6 pgbackrest --stanza=db backup --type=full
+0 19 * * 6 /usr/bin/pgbackrest --stanza=db backup --type=full

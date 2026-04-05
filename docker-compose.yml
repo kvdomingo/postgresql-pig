@@ -45,7 +45,9 @@ services:
   backup:
     image: ghcr.io/kvdomingo/postgresql-pig:18
     restart: unless-stopped
-    command: supercronic /etc/pgbackrest/crontab
+    entrypoint: supercronic
+    command:
+      - /etc/pgbackrest/crontab
     environment:
       PGBACKREST_REPO1_S3_KEY: ${AWS_ACCESS_KEY_ID}
       PGBACKREST_REPO1_S3_KEY_SECRET: ${AWS_SECRET_ACCESS_KEY}
@@ -61,7 +63,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    profiles: [backup]
 
   supavisor:
     image: supabase/supavisor:2.7.4
