@@ -31,6 +31,9 @@ services:
     image: ghcr.io/kvdomingo/postgresql-pig:18
     restart: unless-stopped
     shm_size: 1g
+    command:
+      - -c
+      - config_file=/etc/postgresql/postgresql.conf
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       PGBACKREST_REPO1_S3_KEY: ${BACKBLAZE_KEY_ID}
