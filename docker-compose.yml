@@ -70,6 +70,7 @@ services:
       PGBACKREST_REPO2_S3_REGION: us-west-002
       PGBACKREST_REPO2_S3_ENDPOINT: s3.us-west-002.backblazeb2.com
     volumes:
+      - db-data:/var/lib/postgresql
       - ./pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf
       - pgbackrest-log:/var/log/pgbackrest
     profiles:
