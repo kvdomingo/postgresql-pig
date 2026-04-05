@@ -1,5 +1,6 @@
 volumes:
   db-data:
+  pgbackrest-log:
 
 services:
   dblab:
@@ -42,20 +43,24 @@ services:
       retries: 3
 
   backup:
-    image: offen/docker-volume-backup:v2
+    image: ghcr.io/kvdomingo/postgresql-pig:18
     restart: unless-stopped
+    command: supercronic /etc/pgbackrest/crontab
     environment:
-      AWS_S3_BUCKET_NAME: lab-srv-pg-01-backups
-      AWS_S3_PATH: backup/db-primary
-      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-      BACKUP_CRON_EXPRESSION: "0 0 * * *"
-      BACKUP_COMPRESSION: zst
-      BACKUP_FILENAME: "backup-%Y%m%dT%H%M%SZ.{{ .Extension }}"
-      BACKUP_FILENAME_EXPAND: true
-      BACKUP_FROM_SNAPSHOT: true
+      PGBACKREST_REPO1_S3_KEY: ${AWS_ACCESS_KEY_ID}
+      PGBACKREST_REPO1_S3_KEY_SECRET: ${AWS_SECRET_ACCESS_KEY}
+      PGBACKREST_REPO1_S3_REGION: ap-southeast-1
+      PGBACKREST_REPO2_S3_KEY: ${BACKBLAZE_KEY_ID}
+      PGBACKREST_REPO2_S3_KEY_SECRET: ${BACKBLAZE_APP_KEY}
+      PGBACKREST_REPO2_S3_REGION: us-west-002
+      PGBACKREST_REPO2_S3_ENDPOINT: s3.us-west-002.backblazeb2.com
     volumes:
-      - db-data:/backup/db-primary:ro
+      - ./pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf:ro
+      - ./pgbackrest-crontab:/etc/pgbackrest/crontab:ro
+      - pgbackrest-log:/var/log/pgbackrest
+    depends_on:
+      db:
+        condition: service_healthy
 
   supavisor:
     image: supabase/supavisor:2.7.4
