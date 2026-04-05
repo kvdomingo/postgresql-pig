@@ -1,7 +1,9 @@
 volumes:
   db-data:
+  db-socket:
   pgbackrest-data:
   pgbackrest-log:
+  pgbackrest-spool:
 
 services:
   dblab:
@@ -31,21 +33,20 @@ services:
     shm_size: 1g
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-      PGBACKREST_REPO1_S3_KEY: ${AWS_ACCESS_KEY_ID}
-      PGBACKREST_REPO1_S3_KEY_SECRET: ${AWS_SECRET_ACCESS_KEY}
-      PGBACKREST_REPO1_S3_REGION: ap-southeast-1
-      PGBACKREST_REPO2_S3_KEY: ${BACKBLAZE_KEY_ID}
-      PGBACKREST_REPO2_S3_KEY_SECRET: ${BACKBLAZE_APP_KEY}
-      PGBACKREST_REPO2_S3_REGION: us-west-002
-      PGBACKREST_REPO2_S3_ENDPOINT: s3.us-west-002.backblazeb2.com
+      PGBACKREST_REPO1_S3_KEY: ${BACKBLAZE_KEY_ID}
+      PGBACKREST_REPO1_S3_KEY_SECRET: ${BACKBLAZE_APP_KEY}
+      PGBACKREST_REPO1_S3_REGION: us-west-002
+      PGBACKREST_REPO1_S3_ENDPOINT: s3.us-west-002.backblazeb2.com
     ports:
       - '5432:5432'
     volumes:
       - db-data:/var/lib/postgresql
+      - db-socket:/var/run/postgresql
       - ./postgresql.conf:/etc/postgresql/postgresql.conf:ro
       - ./pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf:ro
       - pgbackrest-log:/var/log/pgbackrest
       - pgbackrest-data:/pgbackrest
+      - pgbackrest-spool:/var/spool/pgbackrest
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       start_period: 10s
@@ -64,21 +65,23 @@ services:
     environment:
       BACKREST_UID: 999
       BACKREST_GID: 999
-      PGBACKREST_REPO1_S3_KEY: ${AWS_ACCESS_KEY_ID}
-      PGBACKREST_REPO1_S3_KEY_SECRET: ${AWS_SECRET_ACCESS_KEY}
-      PGBACKREST_REPO1_S3_REGION: ap-southeast-1
-      PGBACKREST_REPO2_S3_KEY: ${BACKBLAZE_KEY_ID}
-      PGBACKREST_REPO2_S3_KEY_SECRET: ${BACKBLAZE_APP_KEY}
-      PGBACKREST_REPO2_S3_REGION: us-west-002
-      PGBACKREST_REPO2_S3_ENDPOINT: s3.us-west-002.backblazeb2.com
+      PGBACKREST_REPO1_S3_KEY: ${BACKBLAZE_KEY_ID}
+      PGBACKREST_REPO1_S3_KEY_SECRET: ${BACKBLAZE_APP_KEY}
+      PGBACKREST_REPO1_S3_REGION: us-west-002
+      PGBACKREST_REPO1_S3_ENDPOINT: s3.us-west-002.backblazeb2.com
     volumes:
       - db-data:/var/lib/postgresql
+      - db-socket:/var/run/postgresql
       - ./postgresql.conf:/etc/postgresql/postgresql.conf:ro
       - ./pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf
       - pgbackrest-log:/var/log/pgbackrest
       - pgbackrest-data:/pgbackrest
+      - pgbackrest-spool:/var/spool/pgbackrest
     profiles:
       - backup
+    depends_on:
+      db:
+        condition: service_healthy
 
   supavisor:
     image: supabase/supavisor:2.7.4

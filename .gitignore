@@ -41,3 +41,4 @@ terraform.rc
 # End of https://www.toptal.com/developers/gitignore/api/terraform
 
 dump.sql
+.claude/settings.local.json
