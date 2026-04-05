@@ -28,27 +28,9 @@ services:
     image: ghcr.io/kvdomingo/postgresql-pig:18
     restart: unless-stopped
     shm_size: 1g
+    entrypoint: /entrypoint.sh
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - '5432:5432'
-    volumes:
-      - db-data:/var/lib/postgresql
-      - ./postgresql.conf:/etc/postgresql/postgresql.conf:ro
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      start_period: 10s
-      interval: 20s
-      timeout: 5s
-      retries: 3
-
-  backup:
-    image: ghcr.io/kvdomingo/postgresql-pig:18
-    restart: unless-stopped
-    entrypoint: supercronic
-    command:
-      - /etc/pgbackrest/crontab
-    environment:
       PGBACKREST_REPO1_S3_KEY: ${AWS_ACCESS_KEY_ID}
       PGBACKREST_REPO1_S3_KEY_SECRET: ${AWS_SECRET_ACCESS_KEY}
       PGBACKREST_REPO1_S3_REGION: ap-southeast-1
@@ -56,13 +38,21 @@ services:
       PGBACKREST_REPO2_S3_KEY_SECRET: ${BACKBLAZE_APP_KEY}
       PGBACKREST_REPO2_S3_REGION: us-west-002
       PGBACKREST_REPO2_S3_ENDPOINT: s3.us-west-002.backblazeb2.com
+    ports:
+      - '5432:5432'
     volumes:
+      - db-data:/var/lib/postgresql
+      - ./entrypoint.sh:/entrypoint.sh:ro
+      - ./postgresql.conf:/etc/postgresql/postgresql.conf:ro
       - ./pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf:ro
       - ./pgbackrest-crontab:/etc/pgbackrest/crontab:ro
       - pgbackrest-log:/var/log/pgbackrest
-    depends_on:
-      db:
-        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      start_period: 10s
+      interval: 20s
+      timeout: 5s
+      retries: 3
 
   supavisor:
     image: supabase/supavisor:2.7.4
