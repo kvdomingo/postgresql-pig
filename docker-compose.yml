@@ -1,5 +1,6 @@
 volumes:
   db-data:
+  pgbackrest-data:
   pgbackrest-log:
 
 services:
@@ -44,6 +45,7 @@ services:
       - ./postgresql.conf:/etc/postgresql/postgresql.conf:ro
       - ./pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf:ro
       - pgbackrest-log:/var/log/pgbackrest
+      - pgbackrest-data:/pgbackrest
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       start_period: 10s
@@ -71,8 +73,10 @@ services:
       PGBACKREST_REPO2_S3_ENDPOINT: s3.us-west-002.backblazeb2.com
     volumes:
       - db-data:/var/lib/postgresql
+      - ./postgresql.conf:/etc/postgresql/postgresql.conf:ro
       - ./pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf
       - pgbackrest-log:/var/log/pgbackrest
+      - pgbackrest-data:/pgbackrest
     profiles:
       - backup
 
