@@ -54,6 +54,7 @@ services:
   backup:
     image: woblerr/pgbackrest:2.58.0
     restart: unless-stopped
+    entrypoint: pgbackrest
     command:
       - backup
       - --stanza=db
@@ -71,7 +72,7 @@ services:
     volumes:
       - db-data:/var/lib/postgresql
       - ./postgresql.conf:/etc/postgresql/postgresql.conf:ro
-      - ./pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf:ro
+      - ./pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf
       - pgbackrest-log:/var/log/pgbackrest
     profiles:
       - backup
