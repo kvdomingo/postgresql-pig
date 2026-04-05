@@ -56,8 +56,8 @@ services:
   backup:
     image: ghcr.io/kvdomingo/postgresql-pig:18
     restart: unless-stopped
-    entrypoint: pgbackrest
-    command:
+    entrypoint:
+      - pgbackrest
       - backup
       - --stanza=db
       - --type=full
