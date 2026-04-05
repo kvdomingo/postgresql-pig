@@ -6,9 +6,6 @@ FROM --platform=${TARGETPLATFORM} postgres:${PG_VERSION}-bookworm
 
 ARG PG_VERSION
 ARG TARGETARCH
-ARG SUPERCRONIC_VERSION=0.2.33
-
-ADD https://github.com/aptible/supercronic/releases/download/v${SUPERCRONIC_VERSION}/supercronic-linux-${TARGETARCH} /usr/local/bin/supercronic
 
 USER root
 
@@ -22,8 +19,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     apt-get update && \
     apt-get install -y --no-install-recommends curl sudo ca-certificates pgbackrest && \
     mkdir -p /var/log/pgbackrest /var/spool/pgbackrest /etc/pgbackrest && \
-    chown -R 999:999 /var/log/pgbackrest /var/spool/pgbackrest /etc/pgbackrest && \
-    chmod +x /usr/local/bin/supercronic
+    chown -R 999:999 /var/log/pgbackrest /var/spool/pgbackrest /etc/pgbackrest
 
 ADD https://repo.pigsty.io/pig install-pig.sh
 
