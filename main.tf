@@ -39,6 +39,10 @@ locals {
       password = data.infisical_secrets.default.secrets["DB_PASSWORD_LAKEFS"].value
       version  = "1"
     }
+    n8n = {
+      password = data.infisical_secrets.default.secrets["DB_PASSWORD_N8N"].value
+      version  = "1"
+    }
     nocodb = {
       password = data.infisical_secrets.default.secrets["DB_PASSWORD_NOCODB"].value
       version  = "1"
