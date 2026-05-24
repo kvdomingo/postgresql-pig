@@ -31,6 +31,10 @@ locals {
       password = data.infisical_secrets.default.secrets["DB_PASSWORD_BANYUHAY"].value
       version  = "2"
     }
+    bytebase = {
+      password = data.infisical_secrets.default.secrets["DB_PASSWORD_BYTEBASE"].value
+      version  = "1"
+    }
     hannibot = {
       password = data.infisical_secrets.default.secrets["DB_PASSWORD_HANNIBOT"].value
       version  = "2"
