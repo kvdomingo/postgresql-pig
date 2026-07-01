@@ -39,6 +39,10 @@ locals {
       password = data.infisical_secrets.default.secrets["DB_PASSWORD_HANNIBOT"].value
       version  = "2"
     }
+    invoice_builder = {
+      password = data.infisical_secrets.default.secrets["DB_PASSWORD_INVOICE_BUILDER"].value
+      version  = "1"
+    }
     lakefs = {
       password = data.infisical_secrets.default.secrets["DB_PASSWORD_LAKEFS"].value
       version  = "1"
