@@ -2,7 +2,7 @@ name: "[Pipeline] Build and deploy Docker images"
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
     paths:
       - .github/**
       - dblab-server.yml
@@ -11,6 +11,8 @@ on:
       - pgbackrest.conf
       - postgresql.conf
   workflow_dispatch:
+  schedule:
+    - cron: 0 0 * * 0
 
 concurrency:
   group: build
@@ -44,9 +46,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: [18]
+        version: [ 18 ]
     needs: changes
-    if: needs.changes.outputs.build == 'true'
+    if: needs.changes.outputs.build == 'true' || github.event_name != 'push'
     name: Build PostgreSQL ${{ matrix.version }} with Pig CLI
     steps:
       - uses: actions/checkout@v4
@@ -89,7 +91,7 @@ jobs:
 
   deploy:
     runs-on: self-hosted
-    needs: [build]
+    needs: [ build ]
     if: always() && !cancelled()
     name: Deploy to srv-pg-01
     steps:
