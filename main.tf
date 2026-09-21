@@ -43,6 +43,10 @@ locals {
       password = data.infisical_secrets.default.secrets["DB_PASSWORD_LAKEFS"].value
       version  = "1"
     }
+    litellm = {
+      password = data.infisical_secrets.default.secrets["DB_PASSWORD_LITELLM"].value
+      version  = "1"
+    }
     lubelogger = {
       password = data.infisical_secrets.default.secrets["DB_PASSWORD_LUBELOGGER"].value
       version  = "1"
