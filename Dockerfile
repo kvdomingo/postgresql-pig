@@ -6,6 +6,7 @@ FROM --platform=${TARGETPLATFORM} postgres:${PG_VERSION}-bookworm
 
 ARG PG_VERSION
 ARG TARGETARCH
+ARG PIG_VERSION="1.8.0"
 
 USER root
 
@@ -27,9 +28,9 @@ ADD https://repo.pigsty.io/pig install-pig.sh
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     chmod +x install-pig.sh && \
-    bash install-pig.sh && \
-    pig repo add pigsty pgdg -u && \
-    pig ext install \
+    bash install-pig.sh "v${PIG_VERSION}" && \
+    pig repo set && \
+    pig install \
       anon \
       citus \
       hll \
