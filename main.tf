@@ -63,6 +63,10 @@ locals {
       password = data.infisical_secrets.default.secrets["DB_PASSWORD_SOLIDINVOICE"].value
       version  = "1"
     }
+    superset = {
+      password = data.infisical_secrets.default.secrets["DB_PASSWORD_SUPERSET"].value
+      version  = "1"
+    }
     time_machine = {
       password = data.infisical_secrets.default.secrets["DB_PASSWORD_TIME_MACHINE"].value
       version  = "1"
