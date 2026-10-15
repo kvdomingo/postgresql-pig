@@ -9,7 +9,7 @@ provider "infisical" {
 data "infisical_secrets" "default" {
   env_slug     = var.infisical_env
   folder_path  = "/"
-  workspace_id = jsondecode(file("./.infisical.json"))["workspaceId"]
+  workspace_id = yamldecode(file("./.infisical.yaml"))["secrets-management"]["project-id"]
 }
 
 provider "postgresql" {
