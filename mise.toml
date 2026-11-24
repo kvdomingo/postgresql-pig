@@ -1,0 +1,4 @@
+[tools]
+prek = "latest"
+rumdl = "latest"
+terraform = "1"

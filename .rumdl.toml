@@ -1,0 +1,12 @@
+[global]
+line-length = 88
+disable = ["MD033"]
+
+[MD013]
+reflow = true
+code-blocks = false
+code-spans = false
+headings = false
+
+[MD077]
+indent = 4
