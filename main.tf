@@ -23,6 +23,10 @@ provider "postgresql" {
 
 locals {
   application_users = tomap({
+    agenticos = {
+      password = data.infisical_secrets.default.secrets["DB_PASSWORD_AGENTICOS"].value
+      version  = "1"
+    }
     atuin = {
       password = data.infisical_secrets.default.secrets["DB_PASSWORD_ATUIN"].value
       version  = "2"
